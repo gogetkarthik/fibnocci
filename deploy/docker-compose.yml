@@ -1,0 +1,26 @@
+version: '2.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: "my_postgres_fib"
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - my_dbdata:/var/lib/postgresql/data
+
+  fib-service:
+    image: karthikeyan2418/fibonacci
+    ports:
+      - 9001:9001
+    environment:
+      DB_HOST: host.docker.internal
+    command: fibonacci serve
+    depends_on:
+      - db
+
+volumes:
+  my_dbdata:
